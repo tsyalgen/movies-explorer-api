@@ -9,6 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const userRouter = require('./routes/users');
+const movieRouter = require('./routes/movies');
 const error = require('./middlewares/error');
 const { validateAuth, validateSignIn, validateSignUp } = require('./middlewares/validators');
 const NotFoundError = require('./errors/not-found-error');
@@ -46,6 +47,7 @@ app.post('/signup', validateSignUp, createUser);
 app.use(validateAuth, auth);
 
 app.use('/users', userRouter);
+app.use('/movies', movieRouter);
 
 
 
