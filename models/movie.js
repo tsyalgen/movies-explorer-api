@@ -40,8 +40,8 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: mongoose.Schema.Types.ObjectId,
-    // required: true,
+    type: Number,
+    required: true,
   },
   nameRU: {
     type: String,

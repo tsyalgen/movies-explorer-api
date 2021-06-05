@@ -8,13 +8,12 @@ const ConflictError = require('../errors/conflict-error');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-//controller for api testing
+// controller for api testing
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((user) => res.send({ data: user }))
     .catch(next);
 };
-
 
 module.exports.createUser = (req, res, next) => {
   const {

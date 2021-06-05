@@ -14,7 +14,6 @@ const error = require('./middlewares/error');
 const { validateAuth, validateSignIn, validateSignUp } = require('./middlewares/validators');
 const NotFoundError = require('./errors/not-found-error');
 
-
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -40,7 +39,6 @@ mongoose.connect('mongodb://localhost:27017/moviesexplorerdb', {
 
 app.use(requestLogger);
 
-
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignUp, createUser);
 
@@ -48,8 +46,6 @@ app.use(validateAuth, auth);
 
 app.use('/users', userRouter);
 app.use('/movies', movieRouter);
-
-
 
 app.all('*', (req, res, next) => {
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
