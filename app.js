@@ -14,7 +14,7 @@ const error = require('./middlewares/error');
 const { validateAuth, validateSignIn, validateSignUp } = require('./middlewares/validators');
 const NotFoundError = require('./errors/not-found-error');
 
-const { PORT = 3000 } = process.env;
+const { NODE_ENV, PORT = 3000, BASE_URL } = process.env;
 
 const app = express();
 
@@ -29,15 +29,15 @@ const limiter = rateLimit({
   max: 100,
 });
 
-app.use(limiter);
 
-mongoose.connect('mongodb://localhost:27017/moviesexplorerdb', {
+mongoose.connect(`${NODE_ENV === 'production' ? BASE_URL : 'mongodb://localhost:27017/moviesexplorerdb'}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
 
 app.use(requestLogger);
+app.use(limiter);
 
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignUp, createUser);

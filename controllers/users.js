@@ -17,7 +17,7 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    email, password, name, about, avatar,
+    email, password, name,
   } = req.body;
 
   User.findOne({ email })
@@ -25,14 +25,12 @@ module.exports.createUser = (req, res, next) => {
       if (!user) {
         bcrypt.hash(password, 10)
           .then((hash) => User.create({
-            email, name, about, avatar, password: hash,
+            email, name, password: hash,
           })
             .then((userData) => res.send({
               data:
                 {
                   name: userData.name,
-                  about: userData.about,
-                  avatar: userData.avatar,
                   _id: userData._id,
                   email: userData.email,
                 },
@@ -78,20 +76,27 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.updateProfile = (req, res, next) => {
   const { name, email } = req.body;
-
-  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+  User.findOne({ email })
     .then((user) => {
-      if (user === null) {
-        throw new NotFoundError('Пользователь не найден');
+      if (!user) {
+        User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+          .then((user) => {
+            if (user === null) {
+              throw new NotFoundError('Пользователь не найден');
+            } else {
+              res.send({ data: user });
+            }
+          })
+          .catch((err) => {
+            if (err.name === 'ValidationError' || err.name === 'CastError') {
+              next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
+            } else {
+              next(err);
+            }
+          });
       } else {
-        res.send({ data: user });
+        throw new ConflictError('Данный email занят другим пользователем');
       }
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
-      } else {
-        next(err);
-      }
-    });
+    .catch(next);
 };

@@ -1,6 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const { ObjectId } = require('mongoose').Types;
+const AuthError = require('../errors/auth-error');
 
 module.exports.validateUpdateProfile = celebrate({
   body: Joi.object().keys({
@@ -29,8 +30,8 @@ module.exports.validateSignIn = celebrate({
 module.exports.validateSignUp = celebrate({
   body: Joi.object().keys({
     email: Joi.string().email().required(),
-    password: Joi.string().required().min(3),
-    name: Joi.string().min(2).max(30),
+    password: Joi.string().required(),
+    name: Joi.string().required().min(2).max(30),
   }),
 });
 
@@ -42,13 +43,13 @@ module.exports.validateAuth = celebrate({
 
 module.exports.validateCreateMovie = celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required().min(2).max(30),
-    director: Joi.string().required().min(2).max(30),
-    year: Joi.string().required().min(2).max(30),
-    description: Joi.string().required().min(2).max(150),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
     movieId: Joi.number().required(),
-    nameRU: Joi.string().required().min(1).max(30),
-    nameEN: Joi.string().required().min(1).max(30),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
     duration: Joi.number().required(),
     image: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
