@@ -1,7 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const { ObjectId } = require('mongoose').Types;
-const AuthError = require('../errors/auth-error');
 
 module.exports.validateUpdateProfile = celebrate({
   body: Joi.object().keys({

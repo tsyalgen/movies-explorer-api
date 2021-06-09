@@ -80,11 +80,11 @@ module.exports.updateProfile = (req, res, next) => {
     .then((user) => {
       if (!user || req.user._id.toString() === user._id.toString()) {
         User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
-          .then((user) => {
-            if (user === null) {
+          .then((userData) => {
+            if (userData === null) {
               throw new NotFoundError('Пользователь не найден');
             } else {
-              res.send({ data: user });
+              res.send({ data: userData });
             }
           })
           .catch((err) => {

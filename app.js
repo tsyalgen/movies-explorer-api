@@ -29,7 +29,6 @@ const limiter = rateLimit({
   max: 100,
 });
 
-
 mongoose.connect(`${NODE_ENV === 'production' ? BASE_URL : 'mongodb://localhost:27017/moviesexplorerdb'}`, {
   useNewUrlParser: true,
   useCreateIndex: true,

@@ -40,7 +40,8 @@ module.exports.createMovie = (req, res, next) => {
     movieId,
     owner: id,
   })
-    .then((movie) => res.send({ data: {
+    .then((movie) => res.send({
+      data: {
         _id: movie._id,
         country: movie.country,
         director: movie.director,
@@ -53,7 +54,7 @@ module.exports.createMovie = (req, res, next) => {
         nameEN: movie.nameEN,
         thumbnail: movie.thumbnail,
         movieId: movie.movieId,
-      }
+      },
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -80,7 +81,6 @@ module.exports.deleteMovie = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Неверно указан формат ID фильма'));
       } else {
-        console.log(err);
         next(err);
       }
     });
